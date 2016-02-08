@@ -47,8 +47,8 @@ public DollarAmount plus(DollarAmount dollarAmountToAdd){
 	DollarAmount someMoney = new DollarAmount(this.totalAmountInCents + dollarAmountToAdd.totalAmountInCents);
 	   return someMoney;
 }
-public DollarAmount minus(DollarAmount dollarAmountToAdd){
-	DollarAmount someMoney = new DollarAmount(this.totalAmountInCents - dollarAmountToAdd.totalAmountInCents);
+public DollarAmount minus(DollarAmount dollarAmountToSubtract){
+	DollarAmount someMoney = new DollarAmount(this.totalAmountInCents - dollarAmountToSubtract.totalAmountInCents);
 	   return someMoney;
 }
 }
