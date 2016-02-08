@@ -1,6 +1,7 @@
 
 public class DollarAmount {
 private long totalAmountInCents;
+
 public DollarAmount(long totalAmountInCents){
 	this.totalAmountInCents= totalAmountInCents;
 }
