@@ -7,7 +7,6 @@ public class DollarAmountTest {
 		DollarAmount yourMoney= new DollarAmount (20);
 		System.out.println(myMoney.getCents());
 		System.out.println(myMoney.getDollars());
-		System.out.println(myMoney.isEqualTo(yourMoney));
 		System.out.println(myMoney.isLessThan(yourMoney));
 		System.out.println(myMoney.isGreaterThan(yourMoney));
 		System.out.println(myMoney.isNegative());
@@ -21,6 +20,8 @@ public class DollarAmountTest {
 		System.out.println();
 		
 		System.out.println(myMoney.toString());
+		System.out.println(myMoney.hashCode());
+		System.out.println(myMoney.equals(yourMoney));
 		
 	}
 
