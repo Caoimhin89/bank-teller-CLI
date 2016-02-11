@@ -1,9 +1,9 @@
 
 
-public class BankAccount {
-	private String accountHolderName;
-	private String accountNumber;
-	private DollarAmount balance;
+public abstract class BankAccount {
+	protected String accountHolderName;
+	protected String accountNumber;
+	protected DollarAmount balance;
 	
 	public BankAccount() {
 		this.accountHolderName = "John Doe";
@@ -34,10 +34,5 @@ public class BankAccount {
 		destinationAccount.balance = newBalance2;
 	}
 	
-	public DollarAmount withdraw(DollarAmount amountToWithdraw) {
-		DollarAmount newBalance = this.balance.minus(amountToWithdraw);
-		this.balance = newBalance;
-		return this.balance;
-		
-	}
+	public abstract DollarAmount withdraw(DollarAmount amountToWithdraw);
 }
