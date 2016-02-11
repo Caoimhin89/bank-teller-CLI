@@ -18,6 +18,10 @@ public class DollarAmountTest {
 		System.out.println(ourMoney.getCents());
 		System.out.println(ourMoney.getDollars());
 		
+		System.out.println();
+		
+		System.out.println(myMoney.toString());
+		
 	}
 
 }

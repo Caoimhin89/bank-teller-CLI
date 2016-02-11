@@ -23,14 +23,6 @@ public class DollarAmount implements Comparable<DollarAmount> {
 		return totalAmountInCents / 100;
 	}
 
-	public boolean isEqualTo(DollarAmount dollarAmountToCompare) {
-		if (totalAmountInCents == dollarAmountToCompare.totalAmountInCents) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public boolean isLessThan(DollarAmount dollarAmountToCompare) {
 		if (totalAmountInCents < dollarAmountToCompare.totalAmountInCents) {
 			return true;
@@ -84,7 +76,7 @@ public class DollarAmount implements Comparable<DollarAmount> {
 	}
 	
 	public String toString() {
-		return this.getDollars() + "." + this.getCents();
+		return "$" + this.getDollars() + "." + this.getCents();
 	}
 	
 	public int hashCode() {
