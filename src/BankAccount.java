@@ -2,18 +2,18 @@
 
 public abstract class BankAccount {
 	protected String accountHolderName;
-	protected String accountNumber;
+	protected BankCustomer customer;
 	protected DollarAmount balance;
 	
 	public BankAccount() {
-		this.accountHolderName = "John Doe";
-		this.accountNumber = "0";
+		this.customer = new BankCustomer("John Doe", "Unknown", "Unknown");
+		this.accountHolderName = customer.getName();
 		this.balance = new DollarAmount(0);
 	}
 	
-	public BankAccount(String name, String accountNum, DollarAmount balance) {
-		this.accountHolderName = name;
-		this.accountNumber = accountNum;
+	public BankAccount(BankCustomer customer, DollarAmount balance) {
+		this.customer = customer;
+		this.accountHolderName = customer.getName();
 		this.balance = balance;
 	}
 	

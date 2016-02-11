@@ -3,12 +3,10 @@ public class SavingsAccount extends BankAccount {
 	private final DollarAmount serChargeInDollars = new DollarAmount(200);
 	
 	public SavingsAccount(){
-		this.accountHolderName = "John Doe";
-		this.accountNumber = "0";
-		this.balance = new DollarAmount(0);
+		super();
 	}
-	public SavingsAccount(String name, String accountNum, DollarAmount balance){
-		super(name, accountNum, balance);
+	public SavingsAccount(BankCustomer customer, DollarAmount balance){
+		super(customer, balance);
 	}
 
 	@Override

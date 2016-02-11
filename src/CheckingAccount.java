@@ -4,13 +4,11 @@ public class CheckingAccount extends BankAccount{
 	private final DollarAmount overDraftLimit = new DollarAmount(-10000);
 	
 	public CheckingAccount() {
-		this.accountHolderName = "John Doe";
-		this.accountNumber = "0";
-		this.balance = new DollarAmount(0);
+		super();
 	}
 	
-	public CheckingAccount(String name, String accountNum, DollarAmount balance) {
-		super(name, accountNum, balance);
+	public CheckingAccount(BankCustomer customer, DollarAmount balance) {
+		super(customer, balance);
 	}
 	
 	public long getOverDraftFeeInCents() {
