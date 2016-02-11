@@ -5,6 +5,7 @@ public class BankAccountTest {
 	public static void main(String[] args) {
 		DollarAmount villa = new DollarAmount(999555000);
 		DollarAmount trans = new DollarAmount(15000);
+		DollarAmount withdraw = new DollarAmount(200000);
 		BankAccount someAccount = new CheckingAccount();
 		BankAccount ourAccount = new CheckingAccount("Bob Villa", "000001", villa);
 		
@@ -18,7 +19,7 @@ public class BankAccountTest {
 		
 		System.out.println("John Doe wants to withdraw $150.00");
 		System.out.println("John Doe's current balance is $" + someAccount.getBalance().getDollars() + "." + someAccount.getBalance().getCents());
-		someAccount.withdraw(trans);
+		someAccount.withdraw(withdraw);
 		System.out.println("John Doe's new balance is $" + someAccount.getBalance().getDollars() + "." +someAccount.getBalance().getCents());
 	}
 
