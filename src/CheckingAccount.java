@@ -24,10 +24,12 @@ public class CheckingAccount extends BankAccount{
 		DollarAmount newBalance = this.balance.minus(amountToWithdraw);
 		if(this.balance.minus(amountToWithdraw).getTotalAmountInCents() >= 0) {
 			this.balance = newBalance;
+			this.getClient().setSum(this.getClient().getSum().minus(amountToWithdraw));
 			return this.balance;
 		} else if(!this.balance.minus(amountToWithdraw).isLessThan(this.getOverDraftLimit())) {
 			this.balance = newBalance;
 			this.balance = this.balance.plus(penalty);
+			this.getClient().setSum(this.getClient().getSum().minus(amountToWithdraw).plus(penalty));
 			return this.balance;
 		}
 		return this.balance;

@@ -12,11 +12,14 @@ public class SavingsAccount extends BankAccount {
 	@Override
 	public DollarAmount withdraw(DollarAmount amountToWithdraw) {
 		DollarAmount currentBalance = this.getBalance();
-		this.balance = this.getBalance().minus(amountToWithdraw);
+		DollarAmount withDrawn = this.balance = this.getBalance().minus(amountToWithdraw);
 		if(this.getBalance().getTotalAmountInCents() >= 0 && this.getBalance().getTotalAmountInCents() < 15000){
 			this.balance = this.getBalance().minus(serChargeInDollars);
+			this.getClient().setSum(this.getClient().getSum().minus(amountToWithdraw).minus(serChargeInDollars));
 		} else if(this.balance.getTotalAmountInCents() < 0) {
 			this.balance = currentBalance;
+		} else {
+			this.getClient().setSum(this.getClient().getSum().minus(withDrawn));
 		}
 		return balance;
 	}

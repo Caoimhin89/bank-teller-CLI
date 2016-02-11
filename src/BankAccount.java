@@ -15,11 +15,13 @@ public abstract class BankAccount {
 		this.customer = customer;
 		this.accountHolderName = customer.getName();
 		this.balance = balance;
+		this.updateClient();
 	}
 	
 	public DollarAmount deposit(DollarAmount amountToDeposit) {
 		DollarAmount newBalance = this.balance.plus(amountToDeposit);
 		this.balance = newBalance;
+		this.getClient().setSum(this.getClient().getSum().plus(amountToDeposit));
 		return this.balance;
 	}
 	
@@ -27,11 +29,20 @@ public abstract class BankAccount {
 		return this.balance;
 	}
 	
+	public BankCustomer getClient() {
+		return this.customer;
+	}
+	
 	public void transfer(BankAccount destinationAccount, DollarAmount transferAmount) {
 		DollarAmount newBalance = this.balance.minus(transferAmount);
 		this.balance = newBalance;
 		DollarAmount newBalance2 = destinationAccount.balance.plus(transferAmount);
 		destinationAccount.balance = newBalance2;
+		this.getClient().setSum(this.getClient().getSum().minus(transferAmount));
+	}
+	
+	public void updateClient() {
+		this.getClient().setSum(this.getClient().getSum().plus(this.getBalance()));
 	}
 	
 	public abstract DollarAmount withdraw(DollarAmount amountToWithdraw);
