@@ -61,7 +61,13 @@ public class BankTellerCLI {
 		theBank.addClient(newClient);
 		System.out.println("\n***" + newClient.getName() + " added as a customer ***");
 	}
-	
+	public void addAccount(BankCustomer newClient, long startingAmount){
+		System.out.println("\n########## ADD ACCOUNT ##########\n");
+		String accountType= getUserInput("account type").toLowerCase();
+		if( accountType == "checking"){
+			CheckingAccount newAccount = new CheckingAccount(newClient, new DollarAmount(startingAmount));
+		}
+	}
 	
 
 }
