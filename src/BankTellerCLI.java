@@ -66,7 +66,15 @@ public class BankTellerCLI {
 		String accountType= getUserInput("account type").toLowerCase();
 		if( accountType == "checking"){
 			CheckingAccount newAccount = new CheckingAccount(newClient, new DollarAmount(startingAmount));
+		} else if(accountType == "savings") {
+			SavingsAccount newAccount = new SavingsAccount(newClient, new DollarAmount(startingAmount));
+		} else {
+			System.out.println("Invalid account type. Please enter either 'checking' or 'savings'\n");
+			addAccount(newClient, startingAmount);
 		}
+	}
+	public void makeDeposit(BankAccount chosenAccount, DollarAmount amountToDeposit) {
+		chosenAccount.setBalance(chosenAccount.getBalance().plus(amountToDeposit));
 	}
 	
 
