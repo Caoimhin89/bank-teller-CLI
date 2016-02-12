@@ -31,6 +31,12 @@ public class BankTellerCLI {
 				String account = getUserInput("your pin");
 				String withdraw = getUserInput("amount to withdraw");
 				makeWithdraw(theBank.getAccount(account), new DollarAmount(Long.parseLong(withdraw, 10)));
+			} else if(choice.equals("5")) {
+				System.out.println("Please choose an account: ");
+				String sender = getUserInput("your pin");
+				String recipient = getUserInput("recipient's pin");
+				String transfer = getUserInput("amount to transfer");
+				performTransfer(theBank.getAccount(sender), theBank.getAccount(recipient), new DollarAmount(Long.parseLong(transfer, 10)));
 			}
 			if (choice.equals("6")) {
 				exit();
