@@ -9,18 +9,22 @@ public class SavingsAccount extends BankAccount {
 		super(customer, balance);
 	}
 
+	
+	public DollarAmount getSerChargeInDollars() {
+		return serChargeInDollars;
+	}
 	@Override
 	public DollarAmount withdraw(DollarAmount amountToWithdraw) {
 		DollarAmount currentBalance = this.getBalance();
-		DollarAmount withDrawn = this.balance = this.getBalance().minus(amountToWithdraw);
-		if(this.getBalance().getTotalAmountInCents() >= 0 && this.getBalance().getTotalAmountInCents() < 15000){
-			this.balance = this.getBalance().minus(serChargeInDollars);
-			this.getClient().setSum(this.getClient().getSum().minus(amountToWithdraw).minus(serChargeInDollars));
-		} else if(this.balance.getTotalAmountInCents() < 0) {
-			this.balance = currentBalance;
+		DollarAmount withDrawn = this.getBalance().minus(amountToWithdraw);
+		
+		if(!currentBalance.isNegative() && this.getBalance().isLessThan(new DollarAmount(15000))) {
+			this.setBalance(withDrawn.minus(serChargeInDollars));
+		} else if(withDrawn.isNegative() || withDrawn.minus(this.getSerChargeInDollars()).isNegative()) {
+			this.setBalance(currentBalance);
 		} else {
-			this.getClient().setSum(this.getClient().getSum().minus(withDrawn));
+			this.setBalance(withDrawn);
 		}
-		return balance;
+		return this.getBalance();
 	}
 }

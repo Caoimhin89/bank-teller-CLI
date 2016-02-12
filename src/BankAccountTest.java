@@ -5,9 +5,9 @@ public class BankAccountTest {
 	public static void main(String[] args) {
 		BankCustomer bobby = new BankCustomer("Bob Villa", "123 Sesame Street", "555-555-5555");
 		DollarAmount villa = new DollarAmount(50000);
-		DollarAmount trans = new DollarAmount(20000);
-		DollarAmount withdraw = new DollarAmount(25000);
-		BankAccount someAccount = new SavingsAccount();
+		DollarAmount trans = new DollarAmount(50000);
+		DollarAmount withdraw = new DollarAmount(100);
+		BankAccount someAccount = new CheckingAccount();
 		BankAccount bobAccount1 = new CheckingAccount(bobby, villa);
 		BankAccount bobAccount2 = new SavingsAccount(bobby, trans);
 		BankAccount bobAccount3 = new CheckingAccount(bobby, withdraw);

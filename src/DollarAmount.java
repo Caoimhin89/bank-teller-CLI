@@ -16,15 +16,15 @@ public class DollarAmount implements Comparable<DollarAmount> {
 	}
 
 	public int getCents() {
-		return (int) (totalAmountInCents % 100);
+		return (int) (this.totalAmountInCents % 100);
 	}
 
 	public long getDollars() {
-		return totalAmountInCents / 100;
+		return this.totalAmountInCents / 100;
 	}
 
 	public boolean isLessThan(DollarAmount dollarAmountToCompare) {
-		if (totalAmountInCents < dollarAmountToCompare.totalAmountInCents) {
+		if (this.totalAmountInCents < dollarAmountToCompare.totalAmountInCents) {
 			return true;
 		} else {
 			return false;
@@ -32,7 +32,7 @@ public class DollarAmount implements Comparable<DollarAmount> {
 	}
 
 	public boolean isGreaterThan(DollarAmount dollarAmountToCompare) {
-		if (totalAmountInCents > dollarAmountToCompare.totalAmountInCents) {
+		if (this.totalAmountInCents > dollarAmountToCompare.totalAmountInCents) {
 			return true;
 		} else {
 			return false;
@@ -40,7 +40,7 @@ public class DollarAmount implements Comparable<DollarAmount> {
 	}
 
 	public boolean isNegative() {
-		if (totalAmountInCents < 0) {
+		if (this.totalAmountInCents < 0) {
 			return true;
 		} else {
 			return false;

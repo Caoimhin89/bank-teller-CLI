@@ -1,6 +1,6 @@
 
 public class CheckingAccount extends BankAccount{
-	private final long overDraftFeeInCents = -1000;
+	private DollarAmount penalty = new DollarAmount(1000);
 	private final DollarAmount overDraftLimit = new DollarAmount(-10000);
 	
 	public CheckingAccount() {
@@ -11,8 +11,8 @@ public class CheckingAccount extends BankAccount{
 		super(customer, balance);
 	}
 	
-	public long getOverDraftFeeInCents() {
-		return this.overDraftFeeInCents;
+	public DollarAmount getPenalty() {
+		return this.penalty;
 	}
 	
 	public DollarAmount getOverDraftLimit() {
@@ -20,19 +20,16 @@ public class CheckingAccount extends BankAccount{
 	}
 	
 	public DollarAmount withdraw(DollarAmount amountToWithdraw) {
-		DollarAmount penalty = new DollarAmount(this.getOverDraftFeeInCents());
-		DollarAmount newBalance = this.balance.minus(amountToWithdraw);
-		if(this.balance.minus(amountToWithdraw).getTotalAmountInCents() >= 0) {
-			this.balance = newBalance;
-			this.getClient().setSum(this.getClient().getSum().minus(amountToWithdraw));
-			return this.balance;
-		} else if(!this.balance.minus(amountToWithdraw).isLessThan(this.getOverDraftLimit())) {
-			this.balance = newBalance;
-			this.balance = this.balance.plus(penalty);
-			this.getClient().setSum(this.getClient().getSum().minus(amountToWithdraw).plus(penalty));
-			return this.balance;
+		DollarAmount newBalance = this.getBalance().minus(amountToWithdraw);
+		DollarAmount penalized = this.getBalance().minus(amountToWithdraw.plus(this.getPenalty()));
+		
+		if(!newBalance.isNegative()) {
+			this.setBalance(newBalance);
+			
+		} else if(newBalance.isNegative() && (penalized.isGreaterThan(this.getOverDraftLimit())) || penalized.equals(this.getOverDraftLimit())) {
+			this.setBalance(penalized);
 		}
-		return this.balance;
+		return this.getBalance();
 		
 	}
 
