@@ -76,6 +76,9 @@ public class BankTellerCLI {
 	public void makeDeposit(BankAccount chosenAccount, DollarAmount amountToDeposit) {
 		chosenAccount.setBalance(chosenAccount.getBalance().plus(amountToDeposit));
 	}
+	public void makeWithdraw(BankAccount chosenAccount, DollarAmount amountToWithdraw){
+		chosenAccount.setBalance(chosenAccount.getBalance().minus(amountToWithdraw));
+	}
 	
 
 }
