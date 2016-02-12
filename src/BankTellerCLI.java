@@ -18,7 +18,15 @@ public class BankTellerCLI {
 			String choice = getChoiceFromMainMenu();
 			if (choice.equals("1")) {
 				addCustomer();
-			}
+			} else if(choice.equals("2")) {
+				String phone = getUserInput("phone number");
+				addAccount(theBank.getClient(phone));
+			} else if(choice.equals("3")) {
+				System.out.println("Please choose an account: ");
+				String account = getUserInput("your pin");
+				String deposit = getUserInput("amount to deposit");
+				makeDeposit(theBank.getAccount(account), new DollarAmount(Long.parseLong(deposit, 10)));
+			} else if(choice.equals("3"))
 			if (choice.equals("6")) {
 				exit();
 			}
@@ -61,24 +69,32 @@ public class BankTellerCLI {
 		theBank.addClient(newClient);
 		System.out.println("\n***" + newClient.getName() + " added as a customer ***");
 	}
-	public void addAccount(BankCustomer newClient, long startingAmount){
+	public void addAccount(BankCustomer newClient){
 		System.out.println("\n########## ADD ACCOUNT ##########\n");
+		System.out.println("1) Checking Account\n" + "2) Savings Account");
 		String accountType= getUserInput("account type").toLowerCase();
-		if( accountType == "checking"){
-			CheckingAccount newAccount = new CheckingAccount(newClient, new DollarAmount(startingAmount));
-		} else if(accountType == "savings") {
-			SavingsAccount newAccount = new SavingsAccount(newClient, new DollarAmount(startingAmount));
+		if( accountType.equals("1")) {
+			String pin = getUserInput("a new 4-digit pin");
+			CheckingAccount newChecking = new CheckingAccount(newClient, new DollarAmount(0), pin);
+			theBank.addAccount(newChecking);
+		} else if(accountType.equals("2")) {
+			String pin = getUserInput("a new 4-digit pin");
+			SavingsAccount newSavings = new SavingsAccount(newClient, new DollarAmount(0), pin);
+			theBank.addAccount(newSavings);
 		} else {
-			System.out.println("Invalid account type. Please enter either 'checking' or 'savings'\n");
-			addAccount(newClient, startingAmount);
+			System.out.println("Invalid account type. Please enter either '1' for checking or '2' for savings\n");
+			addAccount(newClient);
 		}
 	}
+	
 	public void makeDeposit(BankAccount chosenAccount, DollarAmount amountToDeposit) {
 		chosenAccount.setBalance(chosenAccount.getBalance().plus(amountToDeposit));
 	}
+	
 	public void makeWithdraw(BankAccount chosenAccount, DollarAmount amountToWithdraw){
 		chosenAccount.setBalance(chosenAccount.getBalance().minus(amountToWithdraw));
 	}
+	
 	public void performTransfer(BankAccount sender, BankAccount recipient, DollarAmount amountToTransfer) {
 		sender.setBalance(sender.getBalance().minus(amountToTransfer));
 		recipient.setBalance(recipient.getBalance().minus(amountToTransfer));

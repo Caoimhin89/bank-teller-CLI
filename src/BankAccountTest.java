@@ -8,9 +8,9 @@ public class BankAccountTest {
 		DollarAmount trans = new DollarAmount(50000);
 		DollarAmount withdraw = new DollarAmount(100);
 		BankAccount someAccount = new CheckingAccount();
-		BankAccount bobAccount1 = new CheckingAccount(bobby, villa);
-		BankAccount bobAccount2 = new SavingsAccount(bobby, trans);
-		BankAccount bobAccount3 = new CheckingAccount(bobby, withdraw);
+		BankAccount bobAccount1 = new CheckingAccount(bobby, villa, "1234");
+		BankAccount bobAccount2 = new SavingsAccount(bobby, trans, "5678");
+		BankAccount bobAccount3 = new CheckingAccount(bobby, withdraw, "2468");
 		
 		System.out.println("Bob Villa's sum should be $950.00 \n"
 				+ "Bob's sum is: " + bobby.getSum());

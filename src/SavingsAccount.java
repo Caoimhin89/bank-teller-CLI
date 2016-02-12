@@ -5,8 +5,8 @@ public class SavingsAccount extends BankAccount {
 	public SavingsAccount(){
 		super();
 	}
-	public SavingsAccount(BankCustomer customer, DollarAmount balance){
-		super(customer, balance);
+	public SavingsAccount(BankCustomer customer, DollarAmount balance, String pin){
+		super(customer, balance, pin);
 	}
 
 	

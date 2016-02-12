@@ -3,6 +3,7 @@ public abstract class BankAccount {
 	private String accountHolderName;
 	private BankCustomer customer;
 	private DollarAmount balance;
+	private String pin;
 
 	public BankAccount() {
 		this.customer = new BankCustomer("John Doe", "Unknown", "Unknown");
@@ -10,11 +11,20 @@ public abstract class BankAccount {
 		this.balance = new DollarAmount(0);
 	}
 
-	public BankAccount(BankCustomer customer, DollarAmount balance) {
+	public BankAccount(BankCustomer customer, DollarAmount balance, String pin) {
 		this.customer = customer;
 		this.accountHolderName = customer.getName();
 		this.balance = balance;
 		this.getCustomer().getBankAccounts().add(this);
+		this.pin = pin;
+	}
+	
+	public void setPin(String pin) {
+		this.pin = pin;
+	}
+	
+	public String getPin() {
+		return this.pin;
 	}
 
 	public DollarAmount deposit(DollarAmount amountToDeposit) {

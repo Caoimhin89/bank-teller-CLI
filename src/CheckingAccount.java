@@ -7,8 +7,8 @@ public class CheckingAccount extends BankAccount{
 		super();
 	}
 	
-	public CheckingAccount(BankCustomer customer, DollarAmount balance) {
-		super(customer, balance);
+	public CheckingAccount(BankCustomer customer, DollarAmount balance, String pin) {
+		super(customer, balance, pin);
 	}
 	
 	public DollarAmount getPenalty() {
