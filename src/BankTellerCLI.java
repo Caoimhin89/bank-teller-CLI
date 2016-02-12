@@ -79,6 +79,10 @@ public class BankTellerCLI {
 	public void makeWithdraw(BankAccount chosenAccount, DollarAmount amountToWithdraw){
 		chosenAccount.setBalance(chosenAccount.getBalance().minus(amountToWithdraw));
 	}
+	public void performTransfer(BankAccount sender, BankAccount recipient, DollarAmount amountToTransfer) {
+		sender.setBalance(sender.getBalance().minus(amountToTransfer));
+		recipient.setBalance(recipient.getBalance().minus(amountToTransfer));
+	}
 	
 
 }

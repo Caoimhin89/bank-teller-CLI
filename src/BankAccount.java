@@ -20,6 +20,7 @@ public abstract class BankAccount {
 	public DollarAmount deposit(DollarAmount amountToDeposit) {
 		DollarAmount newBalance = this.balance.plus(amountToDeposit);
 		this.balance = newBalance;
+		this.getCustomer().setCashInHand(this.getCustomer().getCashInHand().minus(amountToDeposit));
 		return this.balance;
 	}
 

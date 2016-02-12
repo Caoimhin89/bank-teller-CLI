@@ -20,10 +20,12 @@ public class SavingsAccount extends BankAccount {
 		
 		if(!currentBalance.isNegative() && this.getBalance().isLessThan(new DollarAmount(15000))) {
 			this.setBalance(withDrawn.minus(serChargeInDollars));
+			this.getCustomer().setCashInHand(this.getCustomer().getCashInHand().plus(amountToWithdraw));
 		} else if(withDrawn.isNegative() || withDrawn.minus(this.getSerChargeInDollars()).isNegative()) {
 			this.setBalance(currentBalance);
 		} else {
 			this.setBalance(withDrawn);
+			this.getCustomer().setCashInHand(this.getCustomer().getCashInHand().plus(amountToWithdraw));
 		}
 		return this.getBalance();
 	}

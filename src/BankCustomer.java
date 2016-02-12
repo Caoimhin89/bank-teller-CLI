@@ -5,6 +5,7 @@ public class BankCustomer {
 	private String name;
 	private String address;
 	private String phoneNumber;
+	private DollarAmount cashInHand;
 	private List<BankAccount> bankAccounts = new ArrayList<BankAccount>();
 	
 	public BankCustomer(String name, String address, String phoneNumber) {
@@ -18,6 +19,14 @@ public class BankCustomer {
 			return true;
 		}
 		return false;
+	}
+	
+	public DollarAmount getCashInHand() {
+		return cashInHand;
+	}
+	
+	public void setCashInHand(DollarAmount cash) {
+		this.cashInHand = cash;
 	}
 
 	public DollarAmount getSum() {
