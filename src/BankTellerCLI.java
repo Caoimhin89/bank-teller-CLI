@@ -26,7 +26,12 @@ public class BankTellerCLI {
 				String account = getUserInput("your pin");
 				String deposit = getUserInput("amount to deposit");
 				makeDeposit(theBank.getAccount(account), new DollarAmount(Long.parseLong(deposit, 10)));
-			} else if(choice.equals("3"))
+			} else if(choice.equals("4")){
+				System.out.println("Please choose an account: ");
+				String account = getUserInput("your pin");
+				String withdraw = getUserInput("amount to withdraw");
+				makeWithdraw(theBank.getAccount(account), new DollarAmount(Long.parseLong(withdraw, 10)));
+			}
 			if (choice.equals("6")) {
 				exit();
 			}
