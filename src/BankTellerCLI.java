@@ -116,7 +116,7 @@ public class BankTellerCLI {
 	}
 	
 	public String checkBalance(String pin) {
-		return theBank.getAccount(pin).toString();
+		return theBank.getAccount(pin).getBalance().toString();
 	}
 	
 
