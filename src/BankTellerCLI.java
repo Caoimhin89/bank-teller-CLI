@@ -52,7 +52,7 @@ public class BankTellerCLI {
 
 		System.out.println("Please choose from the following options:\n");
 
-		System.out.println("0) Check Account Balance/n"
+		System.out.println("0) Check Account Balance\n"
 				+"1) Add Customer\n"
 				+"2) Add Account\n"
 				+"3) Deposit\n"
