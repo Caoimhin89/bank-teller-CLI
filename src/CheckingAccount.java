@@ -25,10 +25,12 @@ public class CheckingAccount extends BankAccount{
 		
 		if(!newBalance.isNegative()) {
 			this.setBalance(newBalance);
+			this.getCustomer().setSum();
 			this.getCustomer().setCashInHand(this.getCustomer().getCashInHand().plus(amountToWithdraw));
 			
 		} else if(newBalance.isNegative() && (penalized.isGreaterThan(this.getOverDraftLimit())) || penalized.equals(this.getOverDraftLimit())) {
 			this.setBalance(penalized);
+			this.getCustomer().setSum();
 			this.getCustomer().setCashInHand(this.getCustomer().getCashInHand().plus(amountToWithdraw));
 		}
 		return this.getBalance();

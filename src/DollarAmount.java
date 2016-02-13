@@ -48,13 +48,11 @@ public class DollarAmount implements Comparable<DollarAmount> {
 	}
 
 	public DollarAmount plus(DollarAmount dollarAmountToAdd) {
-		DollarAmount someMoney = new DollarAmount(this.totalAmountInCents + dollarAmountToAdd.totalAmountInCents);
-		return someMoney;
+		return new DollarAmount(this.totalAmountInCents + dollarAmountToAdd.totalAmountInCents);
 	}
 
 	public DollarAmount minus(DollarAmount dollarAmountToSubtract) {
-		DollarAmount someMoney = new DollarAmount(this.totalAmountInCents - dollarAmountToSubtract.totalAmountInCents);
-		return someMoney;
+		return new DollarAmount(this.totalAmountInCents - dollarAmountToSubtract.totalAmountInCents);
 	}
 
 	public int compareTo(DollarAmount o) {

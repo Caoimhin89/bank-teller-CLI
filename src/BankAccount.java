@@ -17,6 +17,7 @@ public abstract class BankAccount {
 		this.balance = balance;
 		this.getCustomer().getBankAccounts().add(this);
 		this.pin = pin;
+		this.getCustomer().setSum();
 	}
 	
 	public void setPin(String pin) {
@@ -30,6 +31,7 @@ public abstract class BankAccount {
 	public DollarAmount deposit(DollarAmount amountToDeposit) {
 		DollarAmount newBalance = this.balance.plus(amountToDeposit);
 		this.balance = newBalance;
+		this.getCustomer().setSum();
 		this.getCustomer().setCashInHand(this.getCustomer().getCashInHand().minus(amountToDeposit));
 		return this.balance;
 	}
@@ -50,15 +52,15 @@ public abstract class BankAccount {
 		return customer;
 	}
 
-	public BankCustomer getClient() {
-		return this.customer;
-	}
-
 	public void transfer(BankAccount destinationAccount, DollarAmount transferAmount) {
-		DollarAmount newBalance = this.balance.minus(transferAmount);
-		this.balance = newBalance;
-		DollarAmount newBalance2 = destinationAccount.balance.plus(transferAmount);
-		destinationAccount.balance = newBalance2;
+		DollarAmount currentBalance = this.getBalance();
+		if(!this.withdraw(transferAmount).equals(currentBalance)) {                  // Apparently code that executes within an if-statement is not
+//			this.withdraw(transferAmount);											// as hypothetical as originally thought. The withdraw within the
+			this.getCustomer().setSum();											// if-statement actually executes and has an effect on the rest of
+																					// the program. The withdraw is really made.
+			destinationAccount.deposit(transferAmount);
+			destinationAccount.getCustomer().setSum();
+		}
 	}
 
 	public abstract DollarAmount withdraw(DollarAmount amountToWithdraw);

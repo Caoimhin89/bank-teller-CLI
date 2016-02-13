@@ -6,14 +6,16 @@ public class BankCustomer {
 	private String address;
 	private String phoneNumber;
 	private DollarAmount cashInHand;
+	private DollarAmount sum;
 	private List<BankAccount> bankAccounts = new ArrayList<BankAccount>();
 	
 	public BankCustomer(String name, String address, String phoneNumber) {
 		this.name = name;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
+		this.cashInHand = new DollarAmount(0);
 	}
-	
+
 	public boolean isVIP() {
 		if(this.getSum().equals(new DollarAmount(2500000)) || this.getSum().isGreaterThan(new DollarAmount(2500000))) {
 			return true;
@@ -30,11 +32,15 @@ public class BankCustomer {
 	}
 
 	public DollarAmount getSum() {
-		DollarAmount sum = new DollarAmount(0);
+		return this.sum;
+	}
+	
+	public void setSum() {
+		long cents = 0;
 		for(BankAccount account : bankAccounts) {
-			sum.plus(account.getBalance());
+			cents += account.getBalance().getTotalAmountInCents();
 		}
-		return sum;
+		this.sum = new DollarAmount(cents);
 	}
 
 	public String getName() {

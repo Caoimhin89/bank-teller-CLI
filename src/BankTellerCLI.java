@@ -16,7 +16,10 @@ public class BankTellerCLI {
 	public void run() {
 		while (continueSession) {
 			String choice = getChoiceFromMainMenu();
-			if (choice.equals("1")) {
+			if (choice.equals("0")) {
+				String account = getUserInput("your pin number");
+				System.out.println(checkBalance(account));	
+			} else if(choice.equals("1")) {
 				addCustomer();
 			} else if(choice.equals("2")) {
 				String phone = getUserInput("phone number");
@@ -49,7 +52,8 @@ public class BankTellerCLI {
 
 		System.out.println("Please choose from the following options:\n");
 
-		System.out.println("1) Add Customer\n"
+		System.out.println("0) Check Account Balance/n"
+				+"1) Add Customer\n"
 				+"2) Add Account\n"
 				+"3) Deposit\n"
 				+"4) Withdraw\n"
@@ -109,6 +113,10 @@ public class BankTellerCLI {
 	public void performTransfer(BankAccount sender, BankAccount recipient, DollarAmount amountToTransfer) {
 		sender.setBalance(sender.getBalance().minus(amountToTransfer));
 		recipient.setBalance(recipient.getBalance().minus(amountToTransfer));
+	}
+	
+	public String checkBalance(String pin) {
+		return theBank.getAccount(pin).toString();
 	}
 	
 
