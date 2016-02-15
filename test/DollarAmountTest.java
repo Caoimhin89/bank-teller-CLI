@@ -37,6 +37,36 @@ public class DollarAmountTest {
 		DollarAmount comparableDollars = new DollarAmount(60000);
 		Assert.assertTrue(originalDollars.isLessThan(comparableDollars));
 		Assert.assertFalse(comparableDollars.isLessThan(originalDollars));
-		
+	}
+	
+	@Test
+	public void isNegative_returns_true_for_totalAmountInCents_below_zero() {
+		DollarAmount negative = new DollarAmount(-1234);
+		DollarAmount positive = new DollarAmount(12345);
+		boolean isNegative = negative.isNegative();
+		Assert.assertTrue(isNegative);
+		Assert.assertFalse(positive.isNegative());
+	}
+	
+	@Test
+	public void plus_returns_sum_of_two_DollarAmounts() {
+		DollarAmount first = new DollarAmount(123);
+		DollarAmount second = new DollarAmount(123);
+		DollarAmount sum = first.plus(second);
+		Assert.assertTrue(sum.equals(new DollarAmount(246)));
+	}
+	
+	@Test public void minus_returns_difference_of_two_DollarAmounts() {
+		DollarAmount first = new DollarAmount(246);
+		DollarAmount second = new DollarAmount(123);
+		DollarAmount difference = first.minus(second);
+		Assert.assertEquals(new DollarAmount(123), difference);
+	}
+	
+	@Test
+	public void equals_returns_true_for_equality() {
+		DollarAmount firstAmount = new DollarAmount(123);
+		DollarAmount secondAmount = new DollarAmount(123);
+		Assert.assertEquals(firstAmount, secondAmount);
 	}
 }
