@@ -6,10 +6,6 @@ public class DollarAmount implements Comparable<DollarAmount> {
 	public DollarAmount(long totalAmountInCents) {
 		this.totalAmountInCents = totalAmountInCents;
 	}
-
-	public DollarAmount(long dollars, int cents) {
-		this.totalAmountInCents = dollars * 100 + cents;
-	}
 	
 	public long getTotalAmountInCents() {
 		return this.totalAmountInCents;
@@ -80,4 +76,4 @@ public class DollarAmount implements Comparable<DollarAmount> {
 	public int hashCode() {
 		return (int) this.getTotalAmountInCents();
 	}
-}
+}j
