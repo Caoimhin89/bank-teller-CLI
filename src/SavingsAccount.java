@@ -32,4 +32,3 @@ public class SavingsAccount extends BankAccount {
 		return this.getBalance();
 	}
 }
-j
