@@ -21,5 +21,22 @@ public class DollarAmountTest {
 		DollarAmount firstAmount = new DollarAmount(1234);
 		DollarAmount secondAmount = new DollarAmount(1233);
 		Assert.assertTrue(firstAmount.isGreaterThan(secondAmount));
+		Assert.assertFalse(secondAmount.isGreaterThan(firstAmount));
+	}
+	
+	@Test
+	public void return_total_amount_in_cents_from_dollar_amount() {
+		DollarAmount dollars = new DollarAmount(123456);
+		long someCents = dollars.getTotalAmountInCents();
+		Assert.assertEquals(123456, someCents);
+	}
+	
+	@Test
+	public void isLessThan_returns_true_for_greater_amounts() {
+		DollarAmount originalDollars = new DollarAmount(50000);
+		DollarAmount comparableDollars = new DollarAmount(60000);
+		Assert.assertTrue(originalDollars.isLessThan(comparableDollars));
+		Assert.assertFalse(comparableDollars.isLessThan(originalDollars));
+		
 	}
 }
