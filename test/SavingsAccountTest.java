@@ -27,5 +27,13 @@ public class SavingsAccountTest {
 		Assert.assertEquals(amountDeposited, newBalance);
 		Assert.assertEquals(amountDeposited, theAccount.getBalance());
 	}
-
+	@Test
+	public void getReturns_sercharge_in_dollars() {
+		BankCustomer bob = new BankCustomer("Bob", "1234 hill", "1234567890");
+		DollarAmount bobsMoney = new DollarAmount(10000);
+		String pin = new String ("1234");
+		SavingsAccount charge = new SavingsAccount(bob, bobsMoney, pin);
+		DollarAmount serCharge = charge.getSerChargeInDollars();
+		Assert.assertEquals(new DollarAmount(200), serCharge);
+	}
 }
