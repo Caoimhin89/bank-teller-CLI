@@ -1,6 +1,6 @@
 
 
-public class DollarAmountTest {
+public class DollarAmountTestOld {
 
 	public static void main(String[] args) {
 		DollarAmount myMoney =new DollarAmount(2123);
