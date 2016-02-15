@@ -76,4 +76,4 @@ public class DollarAmount implements Comparable<DollarAmount> {
 	public int hashCode() {
 		return (int) this.getTotalAmountInCents();
 	}
-}j
+}
