@@ -9,6 +9,7 @@ public class SavingsAccountTest {
 	
 	private SavingsAccount theAccount;
 	
+	
 	@Test
 	public void new_accounts_start_with_a_zero_balance() {
 		BankCustomer aCustomer = new BankCustomer("John Doe", "123 Main St", "123-456-7890");
@@ -35,5 +36,26 @@ public class SavingsAccountTest {
 		SavingsAccount charge = new SavingsAccount(bob, bobsMoney, pin);
 		DollarAmount serCharge = charge.getSerChargeInDollars();
 		Assert.assertEquals(new DollarAmount(200), serCharge);
+	}
+	@Test
+	public void subtracts_desired_amount_from_account_plus_sercharge_of_$2() {
+		BankCustomer kevin = new BankCustomer("Kevin Glick", "Ohio", "2168709302");
+		SavingsAccount myAccount = new SavingsAccount(kevin , new DollarAmount(10000), "1989");
+		DollarAmount afterWithdraw = myAccount.withdraw(new DollarAmount(5000));
+		Assert.assertEquals(new DollarAmount(4800), afterWithdraw);
+	}
+	@Test
+	public void does_not_allow_withdraw_if_new_balance_is_negative() {
+		BankCustomer kevin = new BankCustomer("Kevin Glick", "Ohio", "2168709302");
+		SavingsAccount myAccount = new SavingsAccount(kevin , new DollarAmount(10000), "1989");
+		DollarAmount afterWithdraw = myAccount.withdraw(new DollarAmount(9900));
+		Assert.assertEquals(new DollarAmount(10000), afterWithdraw);
+	}
+	@Test
+	public void new_balance_matches_current_balance_minus_withdrawn_amount() {
+		BankCustomer kevin = new BankCustomer("Kevin Glick", "Ohio", "2168709302");
+		SavingsAccount myAccount = new SavingsAccount(kevin , new DollarAmount(20000), "1989");
+		DollarAmount afterWithdraw = myAccount.withdraw(new DollarAmount(1000));
+		Assert.assertEquals(new DollarAmount(19000), afterWithdraw);
 	}
 }

@@ -17,14 +17,13 @@ public class SavingsAccount extends BankAccount {
 	public DollarAmount withdraw(DollarAmount amountToWithdraw) {
 		DollarAmount currentBalance = this.getBalance();
 		DollarAmount withDrawn = this.getBalance().minus(amountToWithdraw);
+		DollarAmount penalized = withDrawn.minus(serChargeInDollars);
 		
-		if(!currentBalance.isNegative() && this.getBalance().isLessThan(new DollarAmount(15000))) {
-			this.setBalance(withDrawn.minus(serChargeInDollars));
+		if((!withDrawn.isNegative()) && !penalized.isNegative() && (currentBalance.isLessThan(new DollarAmount(15000)))) {
+			this.setBalance(penalized);
 			this.getCustomer().setSum();
 			this.getCustomer().setCashInHand(this.getCustomer().getCashInHand().plus(amountToWithdraw));
-		} else if(withDrawn.isNegative() || withDrawn.minus(this.getSerChargeInDollars()).isNegative()) {
-			this.setBalance(currentBalance);
-		} else {
+		} else if(!withDrawn.isNegative() && !penalized.isNegative()) {
 			this.setBalance(withDrawn);
 			this.getCustomer().setSum();
 			this.getCustomer().setCashInHand(this.getCustomer().getCashInHand().plus(amountToWithdraw));
