@@ -12,34 +12,56 @@ public class BankTellerCLI {
 		application.run();
 
 	}
+
 	boolean continueSession = true;
+
 	public void run() {
 		while (continueSession) {
 			String choice = getChoiceFromMainMenu();
 			if (choice.equals("0")) {
 				String account = getUserInput("your pin number");
-				System.out.println(checkBalance(account));	
-			} else if(choice.equals("1")) {
+				System.out.println(checkBalance(account));
+			} else if (choice.equals("1")) {
 				addCustomer();
-			} else if(choice.equals("2")) {
+			} else if (choice.equals("2")) {
 				String phone = getUserInput("phone number");
 				addAccount(theBank.getClient(phone));
-			} else if(choice.equals("3")) {
+			} else if (choice.equals("3")) {
 				System.out.println("Please choose an account: ");
 				String account = getUserInput("your pin");
-				String deposit = getUserInput("amount to deposit");
-				makeDeposit(theBank.getAccount(account), new DollarAmount(Long.parseLong(deposit, 10)));
-			} else if(choice.equals("4")){
+				try {
+					String deposit = getUserInput("amount to deposit");
+					if (Long.parseLong(deposit, 10) < 0) {
+						Exception e = new Exception();
+						throw e;
+					} else {
+						makeDeposit(theBank.getAccount(account), new DollarAmount(Long.parseLong(deposit, 10)));
+					}
+				} catch (Exception e) {
+					System.out.println("Cannot deposit negative sum. Please enter valid amount.");
+				}
+
+			} else if (choice.equals("4")) {
 				System.out.println("Please choose an account: ");
 				String account = getUserInput("your pin");
-				String withdraw = getUserInput("amount to withdraw");
-				makeWithdraw(theBank.getAccount(account), new DollarAmount(Long.parseLong(withdraw, 10)));
-			} else if(choice.equals("5")) {
+				try {
+					String withdraw = getUserInput("amount to withdraw");
+					if (Long.parseLong(withdraw, 10) < 0) {
+						Exception e = new Exception();
+						throw e;
+					} else {
+						makeWithdraw(theBank.getAccount(account), new DollarAmount(Long.parseLong(withdraw, 10)));
+					}
+				} catch (Exception e) {
+					System.out.println("Cannot withdraw a negative amount. Please enter a valid amount.");
+				}
+			} else if (choice.equals("5")) {
 				System.out.println("Please choose an account: ");
 				String sender = getUserInput("your pin");
 				String recipient = getUserInput("recipient's pin");
 				String transfer = getUserInput("amount to transfer");
-				performTransfer(theBank.getAccount(sender), theBank.getAccount(recipient), new DollarAmount(Long.parseLong(transfer, 10)));
+				performTransfer(theBank.getAccount(sender), theBank.getAccount(recipient),
+						new DollarAmount(Long.parseLong(transfer, 10)));
 			}
 			if (choice.equals("6")) {
 				exit();
@@ -52,13 +74,8 @@ public class BankTellerCLI {
 
 		System.out.println("Please choose from the following options:\n");
 
-		System.out.println("0) Check Account Balance\n"
-				+"1) Add Customer\n"
-				+"2) Add Account\n"
-				+"3) Deposit\n"
-				+"4) Withdraw\n"
-				+"5) Transfer\n"
-				+"6) Exit");
+		System.out.println("0) Check Account Balance\n" + "1) Add Customer\n" + "2) Add Account\n" + "3) Deposit\n"
+				+ "4) Withdraw\n" + "5) Transfer\n" + "6) Exit");
 
 		return getUserInput("number");
 	}
@@ -68,9 +85,9 @@ public class BankTellerCLI {
 		System.exit(0);
 		this.continueSession = false;
 	}
-	
+
 	private String getUserInput(String prompt) {
-		System.out.println("Enter " + prompt+ " >>> ");
+		System.out.println("Enter " + prompt + " >>> ");
 		return Terminal.readLine();
 	}
 
@@ -79,20 +96,21 @@ public class BankTellerCLI {
 		String name = getUserInput("name");
 		String address = getUserInput("address");
 		String phoneNumber = getUserInput("phone number");
-		
+
 		BankCustomer newClient = new BankCustomer(name, address, phoneNumber);
 		theBank.addClient(newClient);
 		System.out.println("\n***" + newClient.getName() + " added as a customer ***");
 	}
-	public void addAccount(BankCustomer newClient){
+
+	public void addAccount(BankCustomer newClient) {
 		System.out.println("\n########## ADD ACCOUNT ##########\n");
 		System.out.println("1) Checking Account\n" + "2) Savings Account");
-		String accountType= getUserInput("account type").toLowerCase();
-		if( accountType.equals("1")) {
+		String accountType = getUserInput("account type").toLowerCase();
+		if (accountType.equals("1")) {
 			String pin = getUserInput("a new 4-digit pin");
 			CheckingAccount newChecking = new CheckingAccount(newClient, new DollarAmount(0), pin);
 			theBank.addAccount(newChecking);
-		} else if(accountType.equals("2")) {
+		} else if (accountType.equals("2")) {
 			String pin = getUserInput("a new 4-digit pin");
 			SavingsAccount newSavings = new SavingsAccount(newClient, new DollarAmount(0), pin);
 			theBank.addAccount(newSavings);
@@ -101,23 +119,22 @@ public class BankTellerCLI {
 			addAccount(newClient);
 		}
 	}
-	
+
 	public void makeDeposit(BankAccount chosenAccount, DollarAmount amountToDeposit) {
 		chosenAccount.setBalance(chosenAccount.getBalance().plus(amountToDeposit));
 	}
-	
-	public void makeWithdraw(BankAccount chosenAccount, DollarAmount amountToWithdraw){
+
+	public void makeWithdraw(BankAccount chosenAccount, DollarAmount amountToWithdraw) {
 		chosenAccount.setBalance(chosenAccount.getBalance().minus(amountToWithdraw));
 	}
-	
+
 	public void performTransfer(BankAccount sender, BankAccount recipient, DollarAmount amountToTransfer) {
 		sender.setBalance(sender.getBalance().minus(amountToTransfer));
 		recipient.setBalance(recipient.getBalance().minus(amountToTransfer));
 	}
-	
+
 	public String checkBalance(String pin) {
 		return theBank.getAccount(pin).getBalance().toString();
 	}
-	
 
 }
