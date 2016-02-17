@@ -38,7 +38,7 @@ public class BankTellerCLI {
 						makeDeposit(theBank.getAccount(account), new DollarAmount(Long.parseLong(deposit, 10)));
 					}
 				} catch (Exception e) {
-					System.out.println("Cannot deposit negative sum. Please enter valid amount.");
+					System.out.println("Cannot deposit negative sum. Please enter valid amount to deposit.");
 				}
 
 			} else if (choice.equals("4")) {
@@ -53,17 +53,25 @@ public class BankTellerCLI {
 						makeWithdraw(theBank.getAccount(account), new DollarAmount(Long.parseLong(withdraw, 10)));
 					}
 				} catch (Exception e) {
-					System.out.println("Cannot withdraw a negative amount. Please enter a valid amount.");
+					System.out.println("Cannot withdraw a negative amount. Please enter a valid amount to withdraw.");
 				}
 			} else if (choice.equals("5")) {
 				System.out.println("Please choose an account: ");
 				String sender = getUserInput("your pin");
 				String recipient = getUserInput("recipient's pin");
-				String transfer = getUserInput("amount to transfer");
+				try {
+					String transfer = getUserInput("amount to transfer");
+					if (Long.parseLong(transfer, 10) < 0) {
+						Exception e = new Exception();
+						throw e;
+					} else {
 				performTransfer(theBank.getAccount(sender), theBank.getAccount(recipient),
 						new DollarAmount(Long.parseLong(transfer, 10)));
 			}
-			if (choice.equals("6")) {
+				} catch (Exception e) {
+					System.out.println("Cannot transfer a negative amount. Please enter a valid amount to transfer.");
+				}
+			} else if(choice.equals("6")) {
 				exit();
 			}
 		}
