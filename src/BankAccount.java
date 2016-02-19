@@ -1,3 +1,4 @@
+import java.util.Random;
 
 public abstract class BankAccount {
 	private String accountHolderName;
@@ -10,6 +11,7 @@ public abstract class BankAccount {
 		this.customer = new BankCustomer("John Doe", "Unknown", "Unknown");
 		this.accountHolderName = customer.getName();
 		this.balance = new DollarAmount(0);
+		generateAccountNumber();
 	}
 
 	public BankAccount(BankCustomer customer, DollarAmount balance, String pin) {
@@ -18,6 +20,7 @@ public abstract class BankAccount {
 		this.balance = balance;
 		this.getCustomer().getBankAccounts().add(this);
 		this.pin = pin;
+		generateAccountNumber();
 		this.getCustomer().setSum();
 	}
 	
@@ -51,6 +54,18 @@ public abstract class BankAccount {
 
 	public BankCustomer getCustomer() {
 		return customer;
+	}
+	
+	public void generateAccountNumber() {
+		Random random = new Random();
+		String newNum = "";
+		for(int i = 0; i < 17; i++) {		// There are 17 digits in standard NACHA bank account number
+			newNum += random.nextInt(9);
+		}
+		this.accountNumber = newNum.toString();
+	}
+	public String getAccountNumber() {
+		return this.accountNumber;
 	}
 
 	public void transfer(BankAccount destinationAccount, DollarAmount transferAmount) {

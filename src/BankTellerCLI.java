@@ -117,10 +117,14 @@ public class BankTellerCLI {
 		if (accountType.equals("1")) {
 			String pin = getUserInput("a new 4-digit pin");
 			CheckingAccount newChecking = new CheckingAccount(newClient, new DollarAmount(0), pin);
+			System.out.println("You have created a new checking account.\n Your security pin is " 
+			+ pin + " and your account number is " + newChecking.getAccountNumber());
 			theBank.addAccount(newChecking);
 		} else if (accountType.equals("2")) {
 			String pin = getUserInput("a new 4-digit pin");
 			SavingsAccount newSavings = new SavingsAccount(newClient, new DollarAmount(0), pin);
+			System.out.println("You have created a new savings account.\n Your security pin is "
+					+ pin + " and your account number is " + newSavings.getAccountNumber());
 			theBank.addAccount(newSavings);
 		} else {
 			System.out.println("Invalid account type. Please enter either '1' for checking or '2' for savings\n");
