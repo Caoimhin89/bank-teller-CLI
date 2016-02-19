@@ -1,6 +1,7 @@
 
 public abstract class BankAccount {
 	private String accountHolderName;
+	private String accountNumber;
 	private BankCustomer customer;
 	private DollarAmount balance;
 	private String pin;
