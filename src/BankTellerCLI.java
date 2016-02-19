@@ -72,7 +72,7 @@ public class BankTellerCLI {
 					System.out.println("Cannot transfer a negative amount. Please enter a valid amount to transfer.");
 				}
 			} else if(choice.equals("6")) {
-				exit();
+				System.out.println();;
 			}
 		}
 	}
