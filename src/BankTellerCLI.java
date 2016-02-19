@@ -72,7 +72,12 @@ public class BankTellerCLI {
 					System.out.println("Cannot transfer a negative amount. Please enter a valid amount to transfer.");
 				}
 			} else if(choice.equals("6")) {
-				System.out.println();;
+				
+			} else if(choice.equals("7")) {
+				
+			} else if(choice.equals("8")) {
+				System.out.println("Exiting session...");
+				exit();
 			}
 		}
 	}
@@ -83,7 +88,7 @@ public class BankTellerCLI {
 		System.out.println("Please choose from the following options:\n");
 
 		System.out.println("0) Check Account Balance\n" + "1) Add Customer\n" + "2) Add Account\n" + "3) Deposit\n"
-				+ "4) Withdraw\n" + "5) Transfer\n" + "6) Exit");
+				+ "4) Withdraw\n" + "5) Transfer\n" + "6) Export\n" + "7) Import\n" + "8) Exit\n");
 
 		return getUserInput("number");
 	}
@@ -147,6 +152,10 @@ public class BankTellerCLI {
 
 	public String checkBalance(String pin) {
 		return theBank.getAccount(pin).getBalance().toString();
+	}
+	
+	public void exportData(String filePath, String fileName) {
+		
 	}
 
 }
