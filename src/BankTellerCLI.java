@@ -1,3 +1,10 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
+import java.io.BufferedWriter;
+
 import com.techelevator.util.Terminal;
 
 public class BankTellerCLI {
@@ -72,7 +79,13 @@ public class BankTellerCLI {
 					System.out.println("Cannot transfer a negative amount. Please enter a valid amount to transfer.");
 				}
 			} else if(choice.equals("6")) {
-				
+				String targetDirectory = getUserInput("a file directory to which to send your bank data.");
+				String fileName = getUserInput("a name for the file, which will store your bank data.");
+				try {
+					exportData(targetDirectory, fileName);
+				} catch (IOException e) {
+					System.out.println("An error has occurred in processing your request. Please ensure that the file path you specified is correct and then try again.");
+				}
 			} else if(choice.equals("7")) {
 				
 			} else if(choice.equals("8")) {
@@ -154,8 +167,22 @@ public class BankTellerCLI {
 		return theBank.getAccount(pin).getBalance().toString();
 	}
 	
-	public void exportData(String filePath, String fileName) {
+	public void exportData(String filePath, String fileName) throws IOException {
+		File targetFile = new File(filePath, fileName);
+		targetFile.createNewFile();
+		PrintWriter writer = new PrintWriter(targetFile);
 		
+		for(Map.Entry<String, BankCustomer> client : theBank.getClients().entrySet()) {
+			writer.write("C | " + client.getValue().getName() + " | " + client.getValue().getAddress() + " | "
+					+client.getValue().getPhoneNumber());
+			for(BankAccount account : client.getValue().getBankAccounts()) {
+				if(account instanceof CheckingAccount) {
+					writer.write("A | C " + account.getAccountNumber() + " | " + account.getBalance().toString());
+				} else {
+					writer.write("A | S | " + account.getAccountNumber() + " | " + account.getBalance().toString());
+				}
+			}
+		}
 	}
 
 }

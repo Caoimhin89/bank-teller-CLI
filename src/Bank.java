@@ -20,6 +20,9 @@ public class Bank {
 	public BankCustomer getClient(String key) {
 		return clients.get(key);
 	}
+	public Map<String, BankCustomer> getClients() {
+		return this.clients;
+	}
 	
 	public void addAccount(BankAccount accountToAdd) {
 		this.accounts.put(accountToAdd.getPin(), accountToAdd);
