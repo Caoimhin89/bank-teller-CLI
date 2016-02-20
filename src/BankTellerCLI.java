@@ -171,18 +171,25 @@ public class BankTellerCLI {
 		File targetFile = new File(filePath, fileName);
 		targetFile.createNewFile();
 		PrintWriter writer = new PrintWriter(targetFile);
-		
+		System.out.println(targetFile.canWrite());
 		for(Map.Entry<String, BankCustomer> client : theBank.getClients().entrySet()) {
-			writer.write("C | " + client.getValue().getName() + " | " + client.getValue().getAddress() + " | "
-					+client.getValue().getPhoneNumber());
+			String clientInfo = "C | " + client.getValue().getName() + " | " + client.getValue().getAddress() + " | "
+					+client.getValue().getPhoneNumber();
+			System.out.println(clientInfo);
+			writer.println(clientInfo);
 			for(BankAccount account : client.getValue().getBankAccounts()) {
 				if(account instanceof CheckingAccount) {
-					writer.write("A | C " + account.getAccountNumber() + " | " + account.getBalance().toString());
+					String checkingInfo = "A | C | " + account.getAccountNumber() + " | " + account.getBalance().getTotalAmountInCents();
+					System.out.println(checkingInfo);
+					writer.println(checkingInfo);
 				} else {
-					writer.write("A | S | " + account.getAccountNumber() + " | " + account.getBalance().toString());
+					String savingsInfo = "A | S | " + account.getAccountNumber() + " | " + account.getBalance().getTotalAmountInCents();
+					System.out.println(savingsInfo);
+					writer.println(savingsInfo);
 				}
 			}
 		}
+		writer.close();
 	}
 
 }
