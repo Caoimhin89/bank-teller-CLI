@@ -1,3 +1,4 @@
+package banking.project;
 import java.util.Random;
 
 public abstract class BankAccount {

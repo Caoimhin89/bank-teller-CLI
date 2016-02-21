@@ -1,3 +1,4 @@
+package banking.project;
 
 
 public class DollarAmount implements Comparable<DollarAmount> {

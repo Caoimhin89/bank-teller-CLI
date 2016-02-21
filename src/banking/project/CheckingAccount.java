@@ -1,3 +1,4 @@
+package banking.project;
 
 public class CheckingAccount extends BankAccount{
 	private DollarAmount penalty = new DollarAmount(1000);

@@ -1,3 +1,4 @@
+package banking.project;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -160,7 +161,7 @@ public class BankTellerCLI {
 
 	public void performTransfer(BankAccount sender, BankAccount recipient, DollarAmount amountToTransfer) {
 		sender.setBalance(sender.getBalance().minus(amountToTransfer));
-		recipient.setBalance(recipient.getBalance().minus(amountToTransfer));
+		recipient.setBalance(recipient.getBalance().plus(amountToTransfer));
 	}
 
 	public String checkBalance(String pin) {

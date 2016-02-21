@@ -1,3 +1,4 @@
+package banking.project;
 
 public class SavingsAccount extends BankAccount {
 	private final DollarAmount serChargeInDollars = new DollarAmount(200);
