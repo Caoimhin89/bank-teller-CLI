@@ -215,26 +215,8 @@ public class BankTellerCLI {
 		BufferedReader br = new BufferedReader(reader);
 		String[] subStrings = br.readLine().split("\\|");
 		BankCustomer newClient;
-		for(String s : subStrings) {
-			System.out.println(s);
-		}
 
-		if (subStrings[0].equals("C")) {
-			newClient = new BankCustomer(subStrings[1], subStrings[2], subStrings[3]);
-			theBank.addClient(newClient);
-		} else if (subStrings[0].equals("A")) {
-			if (subStrings[1].equals("C")) {
-				newClient = new BankCustomer(subStrings[1], subStrings[2], subStrings[3]);
-				theBank.addAccount(new CheckingAccount(newClient, new DollarAmount(Long.parseLong(subStrings[3])),
-						subStrings[2], subStrings[4]));
-			} else if (subStrings[1].equals("S")) {
-				newClient = new BankCustomer(subStrings[1], subStrings[2], subStrings[3]);
-				theBank.addAccount(new SavingsAccount(newClient, new DollarAmount(Long.parseLong(subStrings[3])),
-						subStrings[2], subStrings[4]));
-			}
-		}
-
-		while (!br.readLine().equals(null)) {
+		while (subStrings.length != 0) {
 			subStrings = br.readLine().split("\\|");
 			
 			if (subStrings[0].equals("C")) {
