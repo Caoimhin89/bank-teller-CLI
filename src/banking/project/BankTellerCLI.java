@@ -1,9 +1,13 @@
 package banking.project;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
 import com.techelevator.util.Terminal;
@@ -73,23 +77,34 @@ public class BankTellerCLI {
 						Exception e = new Exception();
 						throw e;
 					} else {
-				performTransfer(theBank.getAccount(sender), theBank.getAccount(recipient),
-						new DollarAmount(Long.parseLong(transfer, 10)));
-			}
+						performTransfer(theBank.getAccount(sender), theBank.getAccount(recipient),
+								new DollarAmount(Long.parseLong(transfer, 10)));
+					}
 				} catch (Exception e) {
 					System.out.println("Cannot transfer a negative amount. Please enter a valid amount to transfer.");
 				}
-			} else if(choice.equals("6")) {
+			} else if (choice.equals("6")) {
 				String targetDirectory = getUserInput("a file directory to which to send your bank data.");
 				String fileName = getUserInput("a name for the file, which will store your bank data.");
 				try {
 					exportData(targetDirectory, fileName);
 				} catch (IOException e) {
-					System.out.println("An error has occurred in processing your request. Please ensure that the file path you specified is correct and then try again.");
+					System.out.println(
+							"An error has occurred in processing your request. Please ensure that the file path you specified is correct and then try again.");
 				}
-			} else if(choice.equals("7")) {
-				
-			} else if(choice.equals("8")) {
+			} else if (choice.equals("7")) {
+				String filePath = getUserInput(
+						"the filepath for the source file of the data you would like to import.");
+				File sourceFile = new File(filePath);
+				try {
+					importData(sourceFile);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					System.out.println(
+							"An error has occurred in processing your request. Please ensure that the file path you specified is correct and then try again.");
+				}
+			} else if (choice.equals("8")) {
 				System.out.println("Exiting session...");
 				exit();
 			}
@@ -136,14 +151,14 @@ public class BankTellerCLI {
 		if (accountType.equals("1")) {
 			String pin = getUserInput("a new 4-digit pin");
 			CheckingAccount newChecking = new CheckingAccount(newClient, new DollarAmount(0), pin);
-			System.out.println("You have created a new checking account.\n Your security pin is " 
-			+ pin + " and your account number is " + newChecking.getAccountNumber());
+			System.out.println("You have created a new checking account.\n Your security pin is " + pin
+					+ " and your account number is " + newChecking.getAccountNumber());
 			theBank.addAccount(newChecking);
 		} else if (accountType.equals("2")) {
 			String pin = getUserInput("a new 4-digit pin");
 			SavingsAccount newSavings = new SavingsAccount(newClient, new DollarAmount(0), pin);
-			System.out.println("You have created a new savings account.\n Your security pin is "
-					+ pin + " and your account number is " + newSavings.getAccountNumber());
+			System.out.println("You have created a new savings account.\n Your security pin is " + pin
+					+ " and your account number is " + newSavings.getAccountNumber());
 			theBank.addAccount(newSavings);
 		} else {
 			System.out.println("Invalid account type. Please enter either '1' for checking or '2' for savings\n");
@@ -167,30 +182,77 @@ public class BankTellerCLI {
 	public String checkBalance(String pin) {
 		return theBank.getAccount(pin).getBalance().toString();
 	}
-	
+
 	public void exportData(String filePath, String fileName) throws IOException {
 		File targetFile = new File(filePath, fileName);
 		targetFile.createNewFile();
 		PrintWriter writer = new PrintWriter(targetFile);
 		System.out.println(targetFile.canWrite());
-		for(Map.Entry<String, BankCustomer> client : theBank.getClients().entrySet()) {
-			String clientInfo = "C | " + client.getValue().getName() + " | " + client.getValue().getAddress() + " | "
-					+client.getValue().getPhoneNumber();
+		for (Map.Entry<String, BankCustomer> client : theBank.getClients().entrySet()) {
+			String clientInfo = "C|" + client.getValue().getName() + "|" + client.getValue().getAddress() + "|"
+					+ client.getValue().getPhoneNumber();
 			System.out.println(clientInfo);
 			writer.println(clientInfo);
-			for(BankAccount account : client.getValue().getBankAccounts()) {
-				if(account instanceof CheckingAccount) {
-					String checkingInfo = "A | C | " + account.getAccountNumber() + " | " + account.getBalance().getTotalAmountInCents();
+			for (BankAccount account : client.getValue().getBankAccounts()) {
+				if (account instanceof CheckingAccount) {
+					String checkingInfo = "A|C|" + account.getAccountNumber() + "|"
+							+ account.getBalance().getTotalAmountInCents() + "|" + account.getPin();
 					System.out.println(checkingInfo);
 					writer.println(checkingInfo);
 				} else {
-					String savingsInfo = "A | S | " + account.getAccountNumber() + " | " + account.getBalance().getTotalAmountInCents();
+					String savingsInfo = "A|S|" + account.getAccountNumber() + "|"
+							+ account.getBalance().getTotalAmountInCents() + "|" + account.getPin();
 					System.out.println(savingsInfo);
 					writer.println(savingsInfo);
 				}
 			}
 		}
 		writer.close();
+	}
+
+	public void importData(File sourceFile) throws IOException {
+		FileReader reader = new FileReader(sourceFile);
+		BufferedReader br = new BufferedReader(reader);
+		String[] subStrings = br.readLine().split("\\|");
+		BankCustomer newClient;
+		for(String s : subStrings) {
+			System.out.println(s);
+		}
+
+		if (subStrings[0].equals("C")) {
+			newClient = new BankCustomer(subStrings[1], subStrings[2], subStrings[3]);
+			theBank.addClient(newClient);
+		} else if (subStrings[0].equals("A")) {
+			if (subStrings[1].equals("C")) {
+				newClient = new BankCustomer(subStrings[1], subStrings[2], subStrings[3]);
+				theBank.addAccount(new CheckingAccount(newClient, new DollarAmount(Long.parseLong(subStrings[3])),
+						subStrings[2], subStrings[4]));
+			} else if (subStrings[1].equals("S")) {
+				newClient = new BankCustomer(subStrings[1], subStrings[2], subStrings[3]);
+				theBank.addAccount(new SavingsAccount(newClient, new DollarAmount(Long.parseLong(subStrings[3])),
+						subStrings[2], subStrings[4]));
+			}
+		}
+
+		while (!br.readLine().equals(null)) {
+			subStrings = br.readLine().split("\\|");
+			
+			if (subStrings[0].equals("C")) {
+				newClient = new BankCustomer(subStrings[1], subStrings[2], subStrings[3]);
+				theBank.addClient(newClient);
+			} else if (subStrings[0].equals("A")) {
+				if (subStrings[1].equals("C")) {
+					newClient = new BankCustomer(subStrings[1], subStrings[2], subStrings[3]);
+					theBank.addAccount(new CheckingAccount(newClient, new DollarAmount(Long.parseLong(subStrings[3])),
+							subStrings[2], subStrings[4]));
+				} else if (subStrings[1].equals("S")) {
+					newClient = new BankCustomer(subStrings[1], subStrings[2], subStrings[3]);
+					theBank.addAccount(new SavingsAccount(newClient, new DollarAmount(Long.parseLong(subStrings[3])),
+							subStrings[2], subStrings[4]));
+				}
+			}
+		}
+		reader.close();
 	}
 
 }

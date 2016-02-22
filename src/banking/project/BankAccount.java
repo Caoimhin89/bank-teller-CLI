@@ -25,6 +25,16 @@ public abstract class BankAccount {
 		this.getCustomer().setSum();
 	}
 	
+	public BankAccount(BankCustomer customer, DollarAmount balance, String accountNumber, String pin) {
+		this.customer = customer;
+		this.accountHolderName = customer.getName();
+		this.balance = balance;
+		this.getCustomer().getBankAccounts().add(this);
+		this.accountNumber = accountNumber;
+		this.pin = pin;
+		this.getCustomer().setSum();
+	}
+	
 	public void setPin(String pin) {
 		this.pin = pin;
 	}

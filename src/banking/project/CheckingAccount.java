@@ -12,6 +12,10 @@ public class CheckingAccount extends BankAccount{
 		super(customer, balance, pin);
 	}
 	
+	public CheckingAccount(BankCustomer customer, DollarAmount balance, String accountNumber, String pin) {
+		super(customer, balance, accountNumber, pin);
+	}
+	
 	public DollarAmount getPenalty() {
 		return this.penalty;
 	}

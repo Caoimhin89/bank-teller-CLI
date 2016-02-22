@@ -9,6 +9,9 @@ public class SavingsAccount extends BankAccount {
 	public SavingsAccount(BankCustomer customer, DollarAmount balance, String pin){
 		super(customer, balance, pin);
 	}
+	public SavingsAccount(BankCustomer customer, DollarAmount balance, String accountNumber, String pin){
+		super(customer, balance, accountNumber, pin);
+	}
 
 	
 	public DollarAmount getSerChargeInDollars() {
