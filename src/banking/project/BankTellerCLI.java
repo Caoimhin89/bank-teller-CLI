@@ -211,13 +211,15 @@ public class BankTellerCLI {
 	}
 
 	public void importData(File sourceFile) throws IOException {
+	 
 		FileReader reader = new FileReader(sourceFile);
 		BufferedReader br = new BufferedReader(reader);
-		String[] subStrings = br.readLine().split("\\|");
+		String sentence = br.readLine();
 		BankCustomer newClient;
 
-		while (subStrings.length != 0) {
-			subStrings = br.readLine().split("\\|");
+		while (sentence != null && sentence.length() > 0) {
+			System.out.println(sentence); 
+			String [] subStrings = sentence.split("\\|");
 			
 			if (subStrings[0].equals("C")) {
 				newClient = new BankCustomer(subStrings[1], subStrings[2], subStrings[3]);
@@ -233,6 +235,7 @@ public class BankTellerCLI {
 							subStrings[2], subStrings[4]));
 				}
 			}
+			sentence = br.readLine();
 		}
 		reader.close();
 	}
