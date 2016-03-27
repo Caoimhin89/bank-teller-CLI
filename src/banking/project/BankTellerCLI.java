@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
@@ -31,79 +32,39 @@ public class BankTellerCLI {
 		while (continueSession) {
 			String choice = getChoiceFromMainMenu();
 			if (choice.equals("0")) {
-				String account = getUserInput("your pin number");
-				System.out.println(checkBalance(account));
+				checkBalance();
 			} else if (choice.equals("1")) {
 				addCustomer();
 			} else if (choice.equals("2")) {
-				String phone = getUserInput("phone number");
-				addAccount(theBank.getClient(phone));
+				addAccount();
 			} else if (choice.equals("3")) {
-				System.out.println("Please choose an account: ");
-				String account = getUserInput("your pin");
-				try {
-					String deposit = getUserInput("amount to deposit");
-					if (Long.parseLong(deposit, 10) < 0) {
-						Exception e = new Exception();
-						throw e;
-					} else {
-						makeDeposit(theBank.getAccount(account), new DollarAmount(Long.parseLong(deposit, 10)));
-					}
+				try { makeDeposit();
 				} catch (Exception e) {
-					System.out.println("Cannot deposit negative sum. Please enter valid amount to deposit.");
+					System.out.println(e.getMessage());
 				}
-
 			} else if (choice.equals("4")) {
-				System.out.println("Please choose an account: ");
-				String account = getUserInput("your pin");
-				try {
-					String withdraw = getUserInput("amount to withdraw");
-					if (Long.parseLong(withdraw, 10) < 0) {
-						Exception e = new Exception();
-						throw e;
-					} else {
-						makeWithdraw(theBank.getAccount(account), new DollarAmount(Long.parseLong(withdraw, 10)));
-					}
+				try { makeWithdraw();
 				} catch (Exception e) {
-					System.out.println("Cannot withdraw a negative amount. Please enter a valid amount to withdraw.");
+					System.out.println(e.getMessage());
 				}
 			} else if (choice.equals("5")) {
-				System.out.println("Please choose an account: ");
-				String sender = getUserInput("your pin");
-				String recipient = getUserInput("recipient's pin");
 				try {
-					String transfer = getUserInput("amount to transfer");
-					if (Long.parseLong(transfer, 10) < 0) {
-						Exception e = new Exception();
-						throw e;
-					} else {
-						performTransfer(theBank.getAccount(sender), theBank.getAccount(recipient),
-								new DollarAmount(Long.parseLong(transfer, 10)));
-					}
+					performTransfer();
 				} catch (Exception e) {
-					System.out.println("Cannot transfer a negative amount. Please enter a valid amount to transfer.");
+					System.out.println(e.getMessage());
 				}
 			} else if (choice.equals("6")) {
-				String targetDirectory = getUserInput("a file directory to which to send your bank data.");
-				String fileName = getUserInput("a name for the file, which will store your bank data.");
 				try {
-					exportData(targetDirectory, fileName);
-				} catch (IOException e) {
-					System.out.println(
-							"An error has occurred in processing your request. Please ensure that the file path you specified is correct and then try again.");
+					exportData();
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
 				}
 			} else if (choice.equals("7")) {
-				String filePath = getUserInput(
-						"the filepath for the source file of the data you would like to import.");
-				File sourceFile = new File(filePath);
-				try {
-					importData(sourceFile);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					System.out.println(
-							"An error has occurred in processing your request. Please ensure that the file path you specified is correct and then try again.");
-				}
+					try {
+						importData();
+					} catch (IOException e) {
+						System.out.println(e.getMessage());
+					}
 			} else if (choice.equals("8")) {
 				System.out.println("Exiting session...");
 				exit();
@@ -116,8 +77,15 @@ public class BankTellerCLI {
 
 		System.out.println("Please choose from the following options:\n");
 
-		System.out.println("0) Check Account Balance\n" + "1) Add Customer\n" + "2) Add Account\n" + "3) Deposit\n"
-				+ "4) Withdraw\n" + "5) Transfer\n" + "6) Export\n" + "7) Import\n" + "8) Exit\n");
+		System.out.println("0) Check Account Balance\n" 
+						+ "1) Add Customer\n"
+						+ "2) Add Account\n"
+						+ "3) Deposit\n"
+						+ "4) Withdraw\n"
+						+ "5) Transfer\n"
+						+ "6) Export\n"
+						+ "7) Import\n"
+						+ "8) Exit\n");
 
 		return getUserInput("number");
 	}
@@ -144,50 +112,93 @@ public class BankTellerCLI {
 		System.out.println("\n***" + newClient.getName() + " added as a customer ***");
 	}
 
-	public void addAccount(BankCustomer newClient) {
+	public void addAccount() {
+		String phone = getUserInput("phone number");
+		BankCustomer newClient = theBank.getClient(phone);
 		System.out.println("\n########## ADD ACCOUNT ##########\n");
 		System.out.println("1) Checking Account\n" + "2) Savings Account");
-		String accountType = getUserInput("account type").toLowerCase();
+		String accountType = getUserInput("account type");
 		if (accountType.equals("1")) {
-			String pin = getUserInput("a new 4-digit pin");
-			CheckingAccount newChecking = new CheckingAccount(newClient, new DollarAmount(0), pin);
-			System.out.println("You have created a new checking account.\n Your security pin is " + pin
-					+ " and your account number is " + newChecking.getAccountNumber());
-			theBank.addAccount(newChecking);
+			accountType = "checking";
+			createAccount(newClient, accountType);
 		} else if (accountType.equals("2")) {
-			String pin = getUserInput("a new 4-digit pin");
-			SavingsAccount newSavings = new SavingsAccount(newClient, new DollarAmount(0), pin);
-			System.out.println("You have created a new savings account.\n Your security pin is " + pin
-					+ " and your account number is " + newSavings.getAccountNumber());
-			theBank.addAccount(newSavings);
+			accountType = "savings";
+			createAccount(newClient, accountType);
 		} else {
 			System.out.println("Invalid account type. Please enter either '1' for checking or '2' for savings\n");
-			addAccount(newClient);
 		}
 	}
 
-	public void makeDeposit(BankAccount chosenAccount, DollarAmount amountToDeposit) {
-		chosenAccount.setBalance(chosenAccount.getBalance().plus(amountToDeposit));
+	private void createAccount(BankCustomer newClient, String accountType) {
+		BankAccount newAccount = null;
+		String pin = getUserInput("a new 4-digit pin");
+		if(accountType.equals("checking")) {
+			newAccount = new CheckingAccount(newClient, new DollarAmount(0), pin);
+		} else if(accountType.equals("savings")) {
+		newAccount = new SavingsAccount(newClient, new DollarAmount(0), pin);
+		}
+		System.out.println("You have created a new " + accountType + " account.\n Your security pin is " + pin
+				+ " and your account number is " + newAccount.getAccountNumber());
+		theBank.addAccount(newAccount);
 	}
 
-	public void makeWithdraw(BankAccount chosenAccount, DollarAmount amountToWithdraw) {
-		chosenAccount.setBalance(chosenAccount.getBalance().minus(amountToWithdraw));
+	public void makeDeposit() throws Exception {
+		System.out.println("Please choose an account: ");
+		BankAccount chosenAccount = theBank.getAccount(getUserInput("your pin"));
+		String[] depositString = getUserInput("amount to deposit in dollars and cents, separated by a period.\n EX: 500.00").split(Pattern.quote("."));
+		DollarAmount amountToDeposit = new DollarAmount(Long.parseLong(depositString[0])*100 + Long.parseLong(depositString[1]));
+		
+		if (amountToDeposit.isLessThan(new DollarAmount(0))) {
+				Exception e = new Exception("Cannot deposit negative sum. Please enter valid amount to deposit.");
+				throw e;
+		}
+		chosenAccount.deposit(amountToDeposit);
 	}
 
-	public void performTransfer(BankAccount sender, BankAccount recipient, DollarAmount amountToTransfer) {
-		sender.setBalance(sender.getBalance().minus(amountToTransfer));
-		recipient.setBalance(recipient.getBalance().plus(amountToTransfer));
+	public void makeWithdraw() throws Exception {
+		System.out.println("Please choose an account: ");
+		BankAccount chosenAccount = theBank.getAccount(getUserInput("your pin"));
+		System.out.println("You chose to withdraw from: " + chosenAccount);
+		String[] withdrawString = getUserInput("amount to withdraw in dollars and cents, separated by a period.\n EX: 500.00").split(Pattern.quote("."));
+		DollarAmount amountToWithdraw = new DollarAmount(Long.parseLong(withdrawString[0])*100 + Long.parseLong(withdrawString[1]));
+		System.out.println("Amount to withdraw is: " + amountToWithdraw);
+		if (amountToWithdraw.isLessThan(new DollarAmount(0))) {
+			Exception e = new Exception("Cannot withdraw a negative amount. Please input a valid amount to withdraw.");
+			throw e;
+		}
+		chosenAccount.withdraw(amountToWithdraw);
 	}
 
-	public String checkBalance(String pin) {
-		return theBank.getAccount(pin).getBalance().toString();
+	public void performTransfer() throws Exception {
+		System.out.println("Please choose an account: ");
+		BankAccount sender = theBank.getAccount(getUserInput("your pin"));
+		BankAccount recipient = theBank.getAccount(getUserInput("recipient's pin"));
+		String[] transferString = getUserInput("amount to transfer in dollars and cents, separated by a period.\n EX: 500.00").split(Pattern.quote("."));
+		DollarAmount amountToTransfer = new DollarAmount(Long.parseLong(transferString[0])*100 + Long.parseLong(transferString[1]));
+			
+		if (amountToTransfer.isLessThan(new DollarAmount(0))) {
+			Exception e = new Exception("Cannot transfer a negative amount. Please input a valid amount to transfer.");
+			throw e;
+		}
+		sender.withdraw(amountToTransfer);
+		recipient.deposit(amountToTransfer);
 	}
 
-	public void exportData(String filePath, String fileName) throws IOException {
+	public void checkBalance() {
+		String account = getUserInput("your pin number");
+		System.out.println("Your present balance is: " + theBank.getAccount(account).getBalance().toString());
+	}
+
+	public void exportData() throws Exception {
+		String filePath = getUserInput("a file directory to which to send the bank data.");
+		String fileName = getUserInput("a name for the file, which will store the bank data.");
 		File targetFile = new File(filePath, fileName);
 		targetFile.createNewFile();
 		PrintWriter writer = new PrintWriter(targetFile);
-		System.out.println(targetFile.canWrite());
+		if(!targetFile.canWrite()) {
+			Exception e = new IOException("Sorry, the file you have specified cannot be written to. Please enter a valid file path.");
+			throw e;
+		}
 		for (Map.Entry<String, BankCustomer> client : theBank.getClients().entrySet()) {
 			String clientInfo = "C|" + client.getValue().getName() + "|" + client.getValue().getAddress() + "|"
 					+ client.getValue().getPhoneNumber();
@@ -210,7 +221,9 @@ public class BankTellerCLI {
 		writer.close();
 	}
 
-	public void importData(File sourceFile) throws IOException {
+	public void importData() throws IOException {
+		String filePath = getUserInput("the filepath for the source file of the data you would like to import.");
+		File sourceFile = new File(filePath);
 	 
 		FileReader reader = new FileReader(sourceFile);
 		BufferedReader br = new BufferedReader(reader);

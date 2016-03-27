@@ -2,6 +2,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import banking.project.BankCustomer;
+import banking.project.CheckingAccount;
+import banking.project.DollarAmount;
+
 public class CheckingAccountTest {
 	
 	@Test

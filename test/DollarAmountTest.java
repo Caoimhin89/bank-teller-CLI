@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+import banking.project.DollarAmount;
 import junit.framework.Assert;
 
 public class DollarAmountTest {

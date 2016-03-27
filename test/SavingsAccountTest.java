@@ -3,6 +3,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import banking.project.BankCustomer;
+import banking.project.DollarAmount;
+import banking.project.SavingsAccount;
 import junit.framework.Assert;
 
 public class SavingsAccountTest {
